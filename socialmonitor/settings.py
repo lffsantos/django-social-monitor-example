@@ -118,6 +118,7 @@ INSTALLED_APPS = (
     
 )
 
+
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
 # the site admins on every HTTP 500 error when DEBUG=False.
@@ -147,6 +148,15 @@ LOGGING = {
     }
 }
 
+SITE_ID=1
+
+EMAIL_BACKEND = config('EMAIL_BACKEND')
+EMAIL_HOST = config('EMAIL_HOST')
+EMAIL_PORT = config('EMAIL_PORT', cast=int)
+EMAIL_USE_TLS = config('EMAIL_USE_TLS', cast=bool)
+EMAIL_HOST_USER = config('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -155,6 +165,7 @@ TEMPLATES = [
         'OPTIONS': {
             'context_processors': [
                 "django.contrib.auth.context_processors.auth",
+                "django.core.context_processors.request",
                 "django.template.context_processors.debug",
                 "django.template.context_processors.i18n",
                 "django.template.context_processors.media",
@@ -186,14 +197,15 @@ ENDLESS_PAGINATION_NEXT_LABEL = u'Próximo'
 # accounts app settings
 REGISTER_MAX_AGE = 60 * 60 * 24 * 7 # in seconds
 FORGOT_PASSWORD_MAX_AGE = 60 * 60 * 24 * 7 # in seconds
-TWITTER_APP_KEY = 'vB1KdD6fQ4tyrJDBimPEQ'
-TWITTER_APP_SECRET = '35vd3cWHMMpiKZpDJPTms0ux8uoD7s2cj9dnqkXtQI'
-TWITTER_CALLBACK_URL = 'http://socialmonitor.com:8000/account/connect/twitter/callback/'
+TWITTER_APP_KEY ='yM9k3SiMvK7lnMcZqtodKy5MS'
+TWITTER_APP_SECRET ='aQ2ozdwFVQkO4pGr5BV1kP2RBqh6HwvafRrUIvw0ISpLLZqMwv'
+TWITTER_CALLBACK_URL = 'http://localhost:8000/account/connect/twitter/callback/'
 
 # django celery settings
-BROKER_URL = 'django://'
+BROKER_URL = 'redis://localhost:6379/0'
 
-CELERY_ALWAYS_EAGER = True
+CELERY_ALWAYS_EAGER = False
+
 
 import djcelery
 djcelery.setup_loader()
@@ -216,3 +228,13 @@ if PROD_ENV:
             'secure': True,
         },
     }
+
+from datetime import timedelta
+
+CELERYBEAT_SCHEDULE = {
+    'run-every-60-seconds': {
+        'task': 'dashboard.tasks.collect_all_social_searchs',
+        'schedule': timedelta(seconds=60),
+        'args': ()
+    }
+}

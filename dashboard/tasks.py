@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 from django.conf import settings
-
-from urlparse import parse_qs, urlparse
 from datetime import datetime
 from celery import task
 from twython import Twython
