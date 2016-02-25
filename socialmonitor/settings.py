@@ -105,7 +105,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.admin',
     # external apps
-    'endless_pagination',
+    'el_pagination',
     'gunicorn',
     'crispy_forms',
     'djcelery',

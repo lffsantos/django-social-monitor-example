@@ -4,7 +4,7 @@ django-extensions==1.6.1
 django-test-without-migrations==0.4
 flower==0.8.4
 gunicorn==19.4.1
-django-endless-pagination>=1.1
+django-el-pagination==2.1.1
 twython>=2.10.1
 django-crispy-forms>=1.2.8
 python-decouple==3.0
