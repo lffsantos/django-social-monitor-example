@@ -2,55 +2,43 @@
 # Django settings for socialmonitor project.
 
 import os.path
-PROJECT_PATH = os.path.dirname(os.path.abspath(__file__))
+from decouple import config, Csv
+from dj_database_url import parse as dburl
 
-DEBUG = True
-TEMPLATE_DEBUG = DEBUG
+PROJECT_PATH = os.path.dirname(os.path.abspath(__file__))
+BASE_DIR = os.path.dirname(PROJECT_PATH)
+
+SECRET_KEY = config('SECRET_KEY')
+
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = config('DEBUG', default=False, cast=bool)
+
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', default=[], cast=Csv())
+
 
 ADMINS = (
-    ('Allisson Azevedo', 'allisson@gmail.com'),
+    ('Lucas farias', 'lffsantos@gmail.com'),
 )
 
 MANAGERS = ADMINS
 
+# Database
+# https://docs.djangoproject.com/en/1.9/ref/settings/#databases
+
+default_dburl = 'sqlite:///' + os.path.join(BASE_DIR, 'db.sqlite3')
+
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(PROJECT_PATH, 'socialmonitor.sqlite'),
-        'USER': '',
-        'PASSWORD': '',
-        'HOST': '',
-        'PORT': '',
-    }
+    'default' : config('DATABASE_URL', default=default_dburl, cast=dburl),
 }
 
-# Hosts/domain names that are valid for this site; required if DEBUG is False
-# See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = [
-    '.socialmonitor.com'
-]
-
-# Local time zone for this installation. Choices can be found here:
-# http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
-# although not all choices may be available on all operating systems.
-# In a Windows environment this must be set to your system time zone.
-TIME_ZONE = 'America/Recife'
-
-# Language code for this installation. All choices can be found here:
-# http://www.i18nguy.com/unicode/language-identifiers.html
 LANGUAGE_CODE = 'pt-br'
 
-SITE_ID = 1
+TIME_ZONE = 'UTC'
 
-# If you set this to False, Django will make some optimizations so as not
-# to load the internationalization machinery.
 USE_I18N = True
 
-# If you set this to False, Django will not format dates, numbers and
-# calendars according to the current locale.
 USE_L10N = True
 
-# If you set this to False, Django will not use timezone-aware datetimes.
 USE_TZ = True
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
@@ -68,9 +56,13 @@ MEDIA_URL = '/media/'
 # Example: "/var/www/example.com/static/"
 STATIC_ROOT = os.path.join(PROJECT_PATH, 'static')
 
+AWS_BUCKET_NAME = config('AWS_BUCKET_NAME')
+AWS_ACCESS_KEY = config('AWS_ACCESS_KEY')
+AWS_SECRET_KEY = config('AWS_SECRET_KEY')
+
 # URL prefix for static files.
 # Example: "http://example.com/static/", "http://static.example.com/"
-STATIC_URL = '/static/'
+STATIC_URL = config('STATIC_URL').format(AWS_BUCKET_NAME)
 
 # Additional locations of static files
 STATICFILES_DIRS = (
@@ -88,16 +80,6 @@ STATICFILES_FINDERS = (
 #    'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
 
-# Make this unique, and don't share it with anybody.
-SECRET_KEY = '@*j1x@)3q@s!sscuv#rfg1n&+zj&-63bq1u((*e!^7ruvk&^cp'
-
-# List of callables that know how to import templates from various sources.
-TEMPLATE_LOADERS = (
-    'django.template.loaders.filesystem.Loader',
-    'django.template.loaders.app_directories.Loader',
-#     'django.template.loaders.eggs.Loader',
-)
-
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -112,13 +94,6 @@ ROOT_URLCONF = 'socialmonitor.urls'
 
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = 'socialmonitor.wsgi.application'
-
-TEMPLATE_DIRS = (
-    # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
-    # Always use forward slashes, even on Windows.
-    # Don't forget to use absolute paths, not relative paths.
-    os.path.join(PROJECT_PATH, 'templates'),
-)
 
 INSTALLED_APPS = (
     # django core apps
@@ -139,6 +114,7 @@ INSTALLED_APPS = (
     'accounts',
     'staticpages',
     'dashboard',
+    'socialmonitor'
     
 )
 
@@ -171,23 +147,25 @@ LOGGING = {
     }
 }
 
-
-# ==============================================================================
-# Local settings here
-# ==============================================================================
-
-# template context processors
-TEMPLATE_CONTEXT_PROCESSORS = (
-    'django.contrib.auth.context_processors.auth',
-    'django.core.context_processors.debug',
-    'django.core.context_processors.i18n',
-    'django.core.context_processors.media',
-    'django.core.context_processors.static',
-    'django.contrib.messages.context_processors.messages',
-    'django.core.context_processors.request',
-    # inject settings
-    'socialmonitor.context_processors.inject_settings',
-)
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                "django.contrib.auth.context_processors.auth",
+                "django.template.context_processors.debug",
+                "django.template.context_processors.i18n",
+                "django.template.context_processors.media",
+                "django.template.context_processors.static",
+                "django.template.context_processors.tz",
+                "django.contrib.messages.context_processors.messages",
+                'socialmonitor.context_processors.inject_settings',
+            ],
+        },
+    },
+]
 
 # session settings
 SESSION_ENGINE = 'django.contrib.sessions.backends.signed_cookies'
@@ -220,13 +198,21 @@ CELERY_ALWAYS_EAGER = True
 import djcelery
 djcelery.setup_loader()
 
-# ==============================================================================
-# Load settings_local.py if exists
-# ==============================================================================
-try:
-    execfile(os.path.join(PROJECT_PATH, 'settings_local.py'), globals(), locals())
-except IOError:
-    pass
 
 # crispy settings
-CRISPY_TEMPLATE_PACK = 'bootstrap' 
+CRISPY_TEMPLATE_PACK = 'bootstrap'
+
+PROD_ENV = config('PROD_ENV', default=True, cast=bool)
+
+if PROD_ENV:
+    STATICFILES_STORAGE = 'djlibcloud.storage.LibCloudStorage'
+
+    LIBCLOUD_PROVIDERS = {
+        'default': {
+            'type': 'libcloud.storage.types.Provider.S3_SA_EAST',
+            'user': AWS_ACCESS_KEY,
+            'key': AWS_SECRET_KEY,
+            'bucket': AWS_BUCKET_NAME,
+            'secure': True,
+        },
+    }

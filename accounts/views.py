@@ -69,7 +69,7 @@ def register(request, token):
 
 def login(request):
     # get next parameter
-    next = request.REQUEST.get('next', settings.LOGIN_REDIRECT_URL)
+    next = request.GET.get('next', settings.LOGIN_REDIRECT_URL)
 
     if request.method == 'POST':
         form = LoginForm(request.POST)
