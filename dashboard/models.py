@@ -59,7 +59,7 @@ class SocialSearch(models.Model):
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
 
-    def __unicode__(self):
+    def __str__(self):
         return '%s - %s' % (self.get_search_type_display(), self.search_term)
 
     class Meta:
@@ -108,7 +108,7 @@ class Item(models.Model):
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
 
-    def __unicode__(self):
+    def __str__(self):
         return '%s - %s' % (self.social_search, self.id)
 
     class Meta:

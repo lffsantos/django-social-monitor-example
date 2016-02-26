@@ -47,7 +47,7 @@ class SocialAccount(models.Model):
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
 
-    def __unicode__(self):
+    def __str__(self):
         return u'Site: %s - Usuário: %s' % (self.get_site_display(), self.user)
 
     class Meta:
