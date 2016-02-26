@@ -1,0 +1,23 @@
+SECRET_KEY=change me
+DEBUG=True
+ALLOWED_HOSTS=127.0.0.1, .localhost, .herokuapp.com
+PROD_ENV=FALSE
+EMAIL_BACKEND=django.core.mail.backends.console.EmailBackend
+EMAIL_HOST=localhost
+EMAIL_PORT=25
+EMAIL_USE_TLS=False
+EMAIL_HOST_USER=
+EMAIL_HOST_PASSWORD=
+BROKER_URL=redis://localhost:6379/0
+CELERY_ALWAYS_EAGER=FALSE
+MEDIA_ROOT=media
+MEDIA_URL=/media/
+STATIC_URL=/static/
+STATIC_ROOT=static
+AWS_BUCKET_NAME=none
+AWS_ACCESS_KEY=change me
+AWS_SECRET_KEY=change me
+TWITTER_APP_KEY=change me
+TWITTER_APP_SECRET=change me
+TWITTER_CALLBACK_URL=change me
+
