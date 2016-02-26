@@ -43,18 +43,18 @@ USE_TZ = True
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/var/www/example.com/media/"
-MEDIA_ROOT = os.path.join(PROJECT_PATH, 'media')
+MEDIA_ROOT = os.path.join(PROJECT_PATH, config('MEDIA_ROOT'))
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash.
 # Examples: "http://example.com/media/", "http://media.example.com/"
-MEDIA_URL = '/media/'
+MEDIA_URL = config('MEDIA_URL')
 
 # Absolute path to the directory static files should be collected to.
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/var/www/example.com/static/"
-STATIC_ROOT = os.path.join(PROJECT_PATH, 'static')
+STATIC_ROOT = os.path.join(PROJECT_PATH, config('STATIC_ROOT'))
 
 AWS_BUCKET_NAME = config('AWS_BUCKET_NAME')
 AWS_ACCESS_KEY = config('AWS_ACCESS_KEY')
@@ -202,10 +202,9 @@ TWITTER_APP_SECRET ='aQ2ozdwFVQkO4pGr5BV1kP2RBqh6HwvafRrUIvw0ISpLLZqMwv'
 TWITTER_CALLBACK_URL = 'http://localhost:8000/account/connect/twitter/callback/'
 
 # django celery settings
-BROKER_URL = 'redis://localhost:6379/0'
+BROKER_URL = config('BROKER_URL')
 
-CELERY_ALWAYS_EAGER = False
-
+CELERY_ALWAYS_EAGER = config('DEBUG', default=False, cast=bool)
 
 import djcelery
 djcelery.setup_loader()
