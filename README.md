@@ -46,5 +46,5 @@ realized changes:
  -> update django<1.6 to djago 1.9  
   
 credits to: 
-[https://github.com/allisson](https://github.com/allisson)
+[https://github.com/allisson/django-social-monitor-example](https://github.com/allisson/django-social-monitor-example)
 
