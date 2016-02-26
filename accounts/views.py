@@ -70,8 +70,8 @@ def register(request, token):
 def login(request):
     # get next parameter
     next = request.GET.get('next', settings.LOGIN_REDIRECT_URL)
-
     if request.method == 'POST':
+        next = request.POST.get('next', next)
         form = LoginForm(request.POST)
         if form.is_valid():
             user = form.save()
