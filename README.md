@@ -1,7 +1,8 @@
 # django-social-monitor-example
 
 This is a very simple application that makes the collection of tweets according to a fixed term. using django and celery
-
+[](painel.png)  
+[](itens.png)
 ## How to develop?
 
 1. clone repository
