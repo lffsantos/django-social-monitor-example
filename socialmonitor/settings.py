@@ -191,15 +191,15 @@ LOGIN_URL = '/login/'
 LOGOUT_URL = '/logout/'
 
 # django endless pagination settings
-ENDLESS_PAGINATION_PREVIOUS_LABEL = u'Anterior'
-ENDLESS_PAGINATION_NEXT_LABEL = u'Próximo'
+EL_PAGINATION_PREVIOUS_LABEL = u'Anterior'
+EL_PAGINATION_NEXT_LABEL = u'Próximo'
 
 # accounts app settings
 REGISTER_MAX_AGE = 60 * 60 * 24 * 7 # in seconds
 FORGOT_PASSWORD_MAX_AGE = 60 * 60 * 24 * 7 # in seconds
-TWITTER_APP_KEY ='yM9k3SiMvK7lnMcZqtodKy5MS'
-TWITTER_APP_SECRET ='aQ2ozdwFVQkO4pGr5BV1kP2RBqh6HwvafRrUIvw0ISpLLZqMwv'
-TWITTER_CALLBACK_URL = 'http://localhost:8000/account/connect/twitter/callback/'
+TWITTER_APP_KEY = config('TWITTER_APP_KEY')
+TWITTER_APP_SECRET = config('TWITTER_APP_SECRET')
+TWITTER_CALLBACK_URL = config('TWITTER_CALLBACK_URL')
 
 # django celery settings
 BROKER_URL = config('BROKER_URL')
